@@ -1,0 +1,7 @@
+Django>=3.0,<4.0
+psycopg2-binary>=2.8
+celery~=5.1.2
+redis
+djangorestframework~=3.12.4
+attrs~=21.2.0
+crud~=0.1
