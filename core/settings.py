@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6m06sl!s6^cbtoo(+qh%+#te3hzd#+5ts=ib5oka&r+i2rhgpi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['1861-84-127-33-64.ngrok.io']
+ALLOWED_HOSTS = ['fda5-84-127-33-64.ngrok.io']
 
 
 # Application definition
@@ -120,6 +120,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+# Replace default user model from Django
+AUTH_USER_MODEL = 'app.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
