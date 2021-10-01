@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6m06sl!s6^cbtoo(+qh%+#te3hzd#+5ts=ib5oka&r+i2rhgpi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['fda5-84-127-33-64.ngrok.io']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -130,3 +130,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+
+
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'cf5583a52beead'
+EMAIL_HOST_PASSWORD = '8eb596b6137e6e'
+
+APPEND_SLASH = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ]
+}

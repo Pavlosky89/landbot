@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from app.main import UserRegistrationView
+from app.adapters.user_repository import UserRegistrationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app/hola', UserRegistrationView.as_view(), name="hola")
+    path('app/create_user/', UserRegistrationView.as_view(), name="create_user")
 ]

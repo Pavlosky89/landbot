@@ -19,7 +19,7 @@ class CustomAccountManager(BaseUserManager):
 
         return self.create_user(user_name, name, email, phone, password, **other_fields)
 
-    def create_user(self, user_name, name, email, phone, password, **other_fields):
+    def create_user(self, username, name, email, phone, password, **other_fields):
 
         if not name:
             raise ValueError(_('Name is a mandatory field'))
@@ -27,7 +27,7 @@ class CustomAccountManager(BaseUserManager):
             raise ValueError(_('Email is a mandatory field'))
 
         # email = self.normalize_email(email)
-        user = self.model(user_name=user_name,
+        user = self.model(username=username,
                           name=name,
                           email=email,
                           phone=phone,
@@ -38,7 +38,7 @@ class CustomAccountManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    user_name = models.CharField(max_length=150, unique=True)
+    username = models.CharField(max_length=150, unique=True)
     name = models.CharField(max_length=150, unique=False)
     email = models.EmailField(_('email_address'), max_length=200, unique=True)
     phone = models.IntegerField(null=True)
@@ -47,7 +47,7 @@ class CustomUser(AbstractUser):
     # include the function create_user from class CustomAccountManager
     objects = CustomAccountManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
 
     def __str__(self):
-        return self.user_name
+        return self.username
