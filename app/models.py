@@ -2,29 +2,30 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils import timezone
+from app.utils import constants
 
 
 class CustomAccountManager(BaseUserManager):
 
-    def create_superuser(self, user_name, name, email, phone, password, **other_fields):
+    def create_superuser(self, user_name: str, name: str, email: str, phone: str, password: str, **other_fields):
 
-        other_fields.setdefault('is_staff', True)
-        other_fields.setdefault('is_superuser', True)
-        other_fields.setdefault('is_active', True)
+        other_fields.setdefault(constants.IS_STAFF, True)
+        other_fields.setdefault(constants.IS_SUPERUSER, True)
+        other_fields.setdefault(constants.IS_ACTIVE, True)
 
-        if other_fields.get('is_staff') is not True:
-            raise ValueError("Superuser must have is_staff = True")
-        if other_fields.get('is_superuser') is not True:
-            raise ValueError("Superuser must have is_superuser = True")
+        if other_fields.get(constants.IS_STAFF) is not True:
+            raise ValueError(constants.ERROR_USER_001)
+        if other_fields.get(constants.IS_SUPERUSER) is not True:
+            raise ValueError(constants.ERROR_USER_002)
 
         return self.create_user(user_name, name, email, phone, password, **other_fields)
 
-    def create_user(self, username, name, email, phone, password, **other_fields):
+    def create_user(self, username: str, name: str, email: str, phone: str, password: str, **other_fields):
 
         if not name:
-            raise ValueError(_('Name is a mandatory field'))
+            raise ValueError(_())
         if not email:
-            raise ValueError(_('Email is a mandatory field'))
+            raise ValueError(_(constants.ERROR_USER_004))
 
         # email = self.normalize_email(email)
         user = self.model(username=username,
@@ -36,21 +37,21 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
-    def get_name_by_username(self, username):
-        user = CustomUser.objects.get(username__exact="landbottest2@bot.com")
+    def get_name_by_username(self, username: str):
+        user = CustomUser.objects.get(username__exact=username)
         return user.name
 
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     name = models.CharField(max_length=150, unique=False)
-    email = models.EmailField(_('email_address'), max_length=200, unique=True)
+    email = models.EmailField(_(constants.EMAIL_ADDRESS), max_length=200, unique=True)
     phone = models.IntegerField(null=True)
     start_date = models.DateTimeField(default=timezone.now)
 
     # include the function create_user from class CustomAccountManager
     objects = CustomAccountManager()
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = constants.EMAIL
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -59,14 +60,14 @@ class CustomUser(AbstractUser):
 
 class NotificationManager(BaseUserManager):
 
-    def create_notification(self, username, via, topic):
+    def create_notification(self, username: str, via: str, topic: str):
         notification = self.model(username=username,
                                   via=via,
                                   topic=topic)
         notification.save()
         return notification
 
-    def get_via_by_topic(self, topic):
+    def get_via_by_topic(self, topic: str):
         notification = Notification()
         return notification.objects.filter(topic).via
 
