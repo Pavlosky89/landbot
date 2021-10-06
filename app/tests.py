@@ -1,8 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-# Imports needed for the test case "test_user_registration
+from app.models import CustomUser
+from app.models import Notification
 from django.urls import reverse
-from rest_framework import status
 import json
 
 
@@ -47,7 +47,7 @@ class CustomUserTests(TestCase):
             db.objects.create_user('username', 'name', '', '123456789', 'password',
                                    is_superuser=False)
 
-    ''' # Start Redis server before testing this case - It simulates a call to the endpoint "create-user" 
+    ''' # Start Redis server before testing this case - It simulates a call to the endpoint "create_user" 
     def test_user_repository(self):
         url = reverse('create_user')
 
@@ -63,3 +63,29 @@ class CustomUserTests(TestCase):
 
         assert response.status_code == 201
     '''
+
+
+class NotificationTests(TestCase):
+    def test_notification_repository(self):
+        url = reverse('send_notification')
+
+        data = {
+            'username': 'landbottest8@bot.com',
+            'topic': 'pricing',
+        }
+        # Create a temporal user for the test
+        user = CustomUser(username='landbottest8@bot.com', name='name8', email='landbottest8@bot.com',
+                          phone='123456789', password='password')
+        user.save()
+
+        response = self.client.post(url,
+                                    content_type='application/json',
+                                    data=json.dumps(data))
+
+        assert response.status_code == 200
+
+    def test_create_notification(self):
+        notification = Notification.objects.create_notification('username', 'email', 'sales')
+        self.assertEqual(notification.username, 'username')
+        self.assertEqual(notification.via, 'email')
+        self.assertEqual(notification.topic, 'sales')
