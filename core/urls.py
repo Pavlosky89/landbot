@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app.adapters.user_repository import UserRegistrationView
+from app.adapters.notification_repository import NotificationView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('app/create_user/', UserRegistrationView.as_view(), name="create_user")
+    path('app/create_user/', UserRegistrationView.as_view(), name="create_user"),
+    path('app/send_notification', NotificationView.as_view(), name="send_notification")
 ]

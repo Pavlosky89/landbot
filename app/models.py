@@ -36,6 +36,10 @@ class CustomAccountManager(BaseUserManager):
         user.save()
         return user
 
+    def get_name_by_username(self, username):
+        user = CustomUser.objects.get(username__exact="landbottest2@bot.com")
+        return user.name
+
 
 class CustomUser(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
@@ -51,3 +55,28 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class NotificationManager(BaseUserManager):
+
+    def create_notification(self, username, via, topic):
+        notification = self.model(username=username,
+                                  via=via,
+                                  topic=topic)
+        notification.save()
+        return notification
+
+    def get_via_by_topic(self, topic):
+        notification = Notification()
+        return notification.objects.filter(topic).via
+
+
+class Notification(models.Model):
+    username = models.CharField(max_length=150, unique=False)
+
+    topic = models.CharField(max_length=150, unique=False)
+    via = models.CharField(max_length=150, unique=False)
+    send_time = models.DateTimeField(default=timezone.now)
+    objects = NotificationManager()
+
+

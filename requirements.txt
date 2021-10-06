@@ -5,3 +5,4 @@ redis
 djangorestframework~=3.12.4
 attrs~=21.2.0
 crud~=0.1
+pywhatkit~=5.1
